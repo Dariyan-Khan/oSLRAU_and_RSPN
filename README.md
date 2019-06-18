@@ -12,8 +12,8 @@ Use the forked version of [SPFlow](https://github.com/c0derzer0/SPFlow) for inst
 
 ## Using oSLRAU Module
 
-Look at *oSLRAU_AN_RSPN/datasets* folder for a list of sample datasets to use with oSLRAU algorithm. 
-*oSLRAU_AN_RSPN/oSLRAU_run.py* contains example code for running the algorithm
+Look at *datasets* folder for a list of sample datasets to use with oSLRAU algorithm. 
+*oSLRAU_run.py* contains example code for running the algorithm
 ```python
     data = get_data(dataset) # load data as an np ndarray
  ```
@@ -63,8 +63,8 @@ Use rest of the mini batches for updating the structure of learned spn from lear
 ```
 ## Using RSPN Module
 
-Look at *oSLRAU_AN_RSPN/datasets* folder for a list of sample datasets to learn RSPNs. 
-*oSLRAU_AN_RSPN/RSPN_run.py* and *oSLRAU_AN_RSPN/RSPN_read_data.py* contains example code for running the algorithm
+Look at *datasets* folder for a list of sample datasets to learn RSPNs. 
+*RSPN_run.py* and *RSPN_read_data.py* contains example code for running the algorithm
 ```python
     # If sequence length in the data does not vary, load dataset as an np ndarray
     # If sequence length in the data varies, load dataset as a list of ndarrays
