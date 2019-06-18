@@ -8,7 +8,7 @@ of Recurrent Sum-Product-Networks (**RSPN**)
 
 ## Getting Started
 
-Use the forked version of [SPFlow](https://github.com/c0derzer0/SPFlow) for installation.
+Use the forked version of [SPFlow](https://github.com/c0derzer0/SPFlow) for installation. Branch rspn of the forked version contains the latest updates.
 
 ## Using oSLRAU Module
 
