@@ -24,7 +24,9 @@ def read_csv_data(file_path):
     df = df.iloc[:]
 
     # print(df.dtypes)
-    df = df.convert_objects(convert_numeric=True)
+    #df = df.convert_objects(convert_numeric=True)
+    #df = pd.to_numeric(df)
+    df = df.apply(pd.to_numeric)
     # pd.to_numeric(df)
     # print(df)
 

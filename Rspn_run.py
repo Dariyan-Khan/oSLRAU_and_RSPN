@@ -1,11 +1,14 @@
 import sys
 sys.path.append('path/to/SPFlow')
-from Rspn_final import *
+#from Rspn_final import *
+
+from Rspn_read_data import read_arff_data, read_csv_data, read_varying_seq_data
 from spn.structure.leaves.parametric.Parametric import Gaussian, In_Latent
 from spn.algorithms.RSPN import RSPN
 from spn.structure.Base import Context
 from spn.algorithms.oSLRAU import oSLRAU, oSLRAUParams
 from spn.io.Graphics import plot_spn
+import numpy as np
 
 
 def run_rspn(dataset, num_variables, num_latent_variables, num_latent_values, unroll, oSLRAU_params,
@@ -71,7 +74,7 @@ def run_rspn(dataset, num_variables, num_latent_variables, num_latent_values, un
 
 def get_data(dataset):
 
-    csv_file_path_libras = 'path/to/file'
+    csv_file_path_libras = './oSLRAU_and_RSPN/datasets/movement_libras.csv' 
     csv_file_path_hill_valley = 'path/to/file'
     arff_file_path_eeg_eye = 'path/to/file'
 
