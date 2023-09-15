@@ -30,7 +30,6 @@ def run_oSLRAU(dataset, update_after_no_min_batches, prune_after):
 
     # Learn initial spn 
     spn = learn_parametric(first_mini_batch, ds_context)
-    assert False
     plot_spn(spn, 'intitial_spn.pdf')
     print(np.mean(log_likelihood(spn, test_data)))
 
@@ -38,7 +37,7 @@ def run_oSLRAU(dataset, update_after_no_min_batches, prune_after):
                                  currVals=True)
     no_of_minibatches = int(data.shape[0] / mini_batch_size)
     print(f"==>> no_of_minibatches: {no_of_minibatches}")
-    assert False
+
 
     # update using oSLRAU
 
@@ -129,18 +128,12 @@ def get_data(dataset):
         df = df.apply(pd.to_numeric)
 
         data = df.values
-
-        print(f"==>> data.shape: {data.shape}")
-        print(f"==>> data: {data}")
         #assert False
         
 
         data = data[0:-1]
         data = data.astype(float)
 
-        print(data)
-        print(f"==>> data.shape: {data.shape}")
-        print(f"==>> data: {data}")
         return data
     
     elif dataset == "hill":
@@ -152,17 +145,12 @@ def get_data(dataset):
 
         data = df.values
 
-        print(f"==>> data.shape: {data.shape}")
-        print(f"==>> data: {data}")
         #assert False
         
 
         data = data[0:-1]
         data = data.astype(float)
 
-        print(data)
-        print(f"==>> data.shape: {data.shape}")
-        print(f"==>> data: {data}")
         return data
 
 

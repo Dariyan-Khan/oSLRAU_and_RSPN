@@ -29,13 +29,27 @@ def run_rspn(dataset, num_variables, num_latent_variables, num_latent_values, un
     first_mini_batch = train_data[0:mini_batch_size]
 
     dat = first_mini_batch
-    dat = dat[:, 0:num_variables]
-    n = dat.shape[1]  # num of variables in each time step
+
+    print(f"==>> num_variables: {num_variables}")
+    print(f"==>> type(num_variables): {type(num_variables)}")
+    print(f"==>> dat.shape: {dat[0].shape}")
+
+    if len_sequence_varies:
+        dat = [dat[i][0:num_variables] for i in range(len(dat))]
+    
+    else:
+        dat = dat[:, 0:num_variables]
+
+    n = len(dat[0])  # num of variables in each time step
     print(n)
     context = [Gaussian] * n
-    ds_context = Context(parametric_types=context).add_domains(first_mini_batch[:, 0:num_variables])
+    # ds_context = Context(parametric_types=context).add_domains(first_mini_batch[:, 0:num_variables])
+    ds_context = Context(parametric_types=context).add_domains(dat)
 
-    spn, initial_template_spn, top_spn = rspn.build_initial_template(first_mini_batch, ds_context,
+    print(dat)
+    assert False
+
+    spn, initial_template_spn, top_spn = rspn.build_initial_template(dat, ds_context,
                                                                      len_sequence_varies)
 
     plot_spn(spn, 'rspn_initial_spn.pdf')
@@ -76,9 +90,9 @@ def get_data(dataset):
 
     csv_file_path_libras = './oSLRAU_and_RSPN/datasets/movement_libras.csv' 
     csv_file_path_hill_valley = 'path/to/file'
-    arff_file_path_eeg_eye = 'path/to/file'
+    arff_file_path_eeg_eye = ''
 
-    varying_seq_file_path_japan_vowels = 'path/to/file'
+    varying_seq_file_path_japan_vowels = './datasets/japan_vowels.train'
 
     if dataset == 'libras':
         file_path = csv_file_path_libras
@@ -104,7 +118,7 @@ def get_data(dataset):
 
 
 def main():
-    dataset = 'libras'
+    dataset = 'japan_vowels'
     num_variables = 1
     num_latent_variables = 2
     num_latent_values = 2
@@ -114,11 +128,10 @@ def main():
     update_after_no_min_batches = 1
     full_update = False
     update_leaves = True
-    len_sequence_varies = False
+    len_sequence_varies = True
 
     run_rspn(dataset, num_variables, num_latent_variables, num_latent_values, unroll, oSLRAU_params,
              update_after_no_min_batches, full_update, update_leaves, len_sequence_varies)
-
 
 
 
