@@ -34,9 +34,6 @@ class MixedState():
 
 
 if __name__ == "__main__":
-    b = BernoulliState(0.5)
-    print(b.sample1())
-
 
     m = MixedState(0.0, 1.0, 0.5)
     print(m.sample1())
