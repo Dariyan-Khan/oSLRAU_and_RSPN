@@ -17,7 +17,7 @@ class BernoulliState():
         self.p = prob
     
     def sample1(self):
-        float(np.random.choice([0, 1], 1, p=[1-self.prob, self.prob]))
+        return float(np.random.choice([0, 1], 1, p=[1-self.p, self.p]))
 
 
 class MixedState():
@@ -30,7 +30,17 @@ class MixedState():
         self.bern_state = BernoulliState(self.p)
     
     def sample1(self):
-        return [self.normal_state.sample1(), self.bern_state()]
+        return [self.normal_state.sample1(), self.bern_state.sample1()]
+
+
+if __name__ == "__main__":
+    b = BernoulliState(0.5)
+    print(b.sample1())
+
+
+    m = MixedState(0.0, 1.0, 0.5)
+    print(m.sample1())
+
 
 
 
