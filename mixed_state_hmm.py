@@ -1,5 +1,6 @@
 import numpy as np
 import scipy.stats as stats
+import itertools
 
 class GaussianState():
 
@@ -79,6 +80,11 @@ class MixedHMM():
         return self.sample_full(n)[1]
 
 
+    def all_latent_traj(self, n):
+        all_traj = [list(range(self.num_states)) for _ in range(n)]
+        return list(itertools.product(*all_traj))
+
+
     def ll(self, seq):
         log_ll = 0
         for i, (x, y) in enumerate(seq):
@@ -86,6 +92,10 @@ class MixedHMM():
             log_ll += state.ll(x, y)
 
         return log_ll
+
+
+        # for element in itertools.product(*somelists)
+
     
     def avg_ll(self, seqs):
         all_log_ll = 0
@@ -93,6 +103,36 @@ class MixedHMM():
             all_log_ll += self.ll(seq)
         
         return all_log_ll / len(seqs)
+
+
+    def true_ll(self, seq):
+        ll = -np.inf
+        seq_len = len(seq)
+        for traj in self.all_latent_traj(seq_len):
+            traj_ll = 0
+            print(f"seq[0]: {traj[0]}")
+            traj_ll += np.log(self.init_probs[traj[0]])
+            curr_state = self.states[traj[0]]
+            x, y = seq[0]
+            traj_ll += curr_state.ll(x,y)
+            for (i, (x, y)) in zip(list(range(1, len(traj))), seq[1:]): # zips togethter iterator over trajectory and observations
+                traj_ll += np.log(self.trans_mat[traj[i-1], traj[i]])
+                curr_state = self.states[traj[i]]
+                traj_ll += curr_state.ll(x,y)
+            
+            ll = np.log(np.exp(ll) + np.exp(traj_ll))
+
+        return ll 
+    
+
+    
+    def true_avg_ll_2var(self, seqs):
+        all_log_ll = 0
+        for seq in seqs:
+            all_log_ll += self.true_ll(seq)
+        
+        return all_log_ll / len(seqs)
+
 
             
 
@@ -107,7 +147,8 @@ if __name__ == "__main__":
     test_len_mix = 5
     test_data_mix = np.array([mhmm.sample_obs(num_time_steps_mix) for _ in range(test_len_mix)])
     avg_ll_mix = mhmm.avg_ll(test_data_mix)
-    print(avg_ll_mix)
+    print(mhmm.avg_ll(test_data_mix))
+    print(mhmm.true_avg_ll(test_data_mix))
 
 
 
