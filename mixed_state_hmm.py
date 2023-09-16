@@ -144,14 +144,10 @@ class MixedHMM():
         return all_log_ll / len(seqs)
 
 
-            
-
-
-
-
 
 if __name__ == "__main__":
-    mixed_states = [[0.0, 1.0, 0.2], [2.0, 1.0, 0.3], [3.0, 1.0, 0.4]]
+    mixed_states = [[0.0, 1.0, 0.2], [1.0, 1.0, 0.3], [2.0, 1.0, 0.4]]
+    mixed_states = [[0.0, 1.0, 0.5], [10.0, 1.0, 0.5], [20.0, 1.0, 0.5]]
     mhmm = MixedHMM(mixed_states, trans_mat="random")
     num_time_steps_mix = 2
     test_len_mix = 5
