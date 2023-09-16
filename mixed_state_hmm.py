@@ -56,6 +56,17 @@ class MixedHMM():
         if trans_mat is None:
             self.trans_mat = np.array([[0.0, 1.0, 0.0], [0.0, 0.0, 1.0], [1.0, 0.0, 0.0]])
         
+        if trans_mat == "random":
+            trans_mat = np.random.rand(self.num_states, self.num_states)
+            trans_sum = np.sum(trans_mat, axis=1)
+            trans_sum = trans_sum[:, np.newaxis]
+            self.trans_mat = trans_mat / trans_sum
+        
+        if init_probs == "random":
+            init_probs = np.random.rand(1, self.num_states)
+            self.init_probs = init_probs / sum(init_probs)
+
+        
 
         self.curr_state = np.random.choice(list(range(self.num_states)), p=self.init_probs)
 
@@ -110,7 +121,6 @@ class MixedHMM():
         seq_len = len(seq)
         for traj in self.all_latent_traj(seq_len):
             traj_ll = 0
-            print(f"seq[0]: {traj[0]}")
             traj_ll += np.log(self.init_probs[traj[0]])
             curr_state = self.states[traj[0]]
             x, y = seq[0]
@@ -126,7 +136,7 @@ class MixedHMM():
     
 
     
-    def true_avg_ll_2var(self, seqs):
+    def true_avg_ll(self, seqs):
         all_log_ll = 0
         for seq in seqs:
             all_log_ll += self.true_ll(seq)
@@ -141,8 +151,8 @@ class MixedHMM():
 
 
 if __name__ == "__main__":
-    mixed_states = [[0.0, 1.0, 0.5], [10.0, 1.0, 0.5], [20.0, 1.0, 0.5]]
-    mhmm = MixedHMM(mixed_states)
+    mixed_states = [[0.0, 1.0, 0.2], [2.0, 1.0, 0.3], [3.0, 1.0, 0.4]]
+    mhmm = MixedHMM(mixed_states, trans_mat="random")
     num_time_steps_mix = 2
     test_len_mix = 5
     test_data_mix = np.array([mhmm.sample_obs(num_time_steps_mix) for _ in range(test_len_mix)])
