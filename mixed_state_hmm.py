@@ -1,4 +1,5 @@
 import numpy as np
+import scipy.stats as stats
 
 class GaussianState():
 
@@ -8,7 +9,9 @@ class GaussianState():
     
     def sample1(self):
         return float((np.random.normal(self.mean, self.std, 1))[0])
-
+    
+    def ll(self, x):
+        return np.log(stats.norm.pdf(x, loc=self.mean, scale=self.std))
 
 
 class BernoulliState():
@@ -18,6 +21,10 @@ class BernoulliState():
     
     def sample1(self):
         return float((np.random.choice([0, 1], 1, p=[1-self.p, self.p]))[0])
+    
+    def ll(self, x):
+        assert (x == 1) or (x==0)
+        return np.log((self.p*x) + (1-self.p)*(1-x))
 
 
 class MixedState():
@@ -31,6 +38,9 @@ class MixedState():
     
     def sample1(self):
         return [self.normal_state.sample1(), self.bern_state.sample1()]
+    
+    def ll(self, x, y):
+        return self.normal_state.ll(x) + self.bern_state.ll(y)
 
 
 class MixedHMM():
@@ -49,7 +59,8 @@ class MixedHMM():
         self.curr_state = np.random.choice(list(range(self.num_states)), p=self.init_probs)
 
     
-    def sample_traj(self, n):
+    def sample_full(self, n):
+        self.curr_state = np.random.choice(list(range(self.num_states)), p=self.init_probs)
         traj_states = [self.curr_state]
         traj_obs = [self.states[self.curr_state].sample1()]
         for t in range(1,n):
@@ -59,6 +70,32 @@ class MixedHMM():
             traj_obs.append(self.states[self.curr_state].sample1())
         
         return traj_obs, traj_states
+    
+
+    def sample_obs(self, n):
+        return self.sample_full(n)[0]
+    
+    def sample_states(self, n):
+        return self.sample_full(n)[1]
+
+
+    def ll(self, seq):
+        log_ll = 0
+        for i, (x, y) in enumerate(seq):
+            state = self.states[i % self.num_states]
+            log_ll += state.ll(x, y)
+
+        return log_ll
+    
+    def avg_ll(self, seqs):
+        all_log_ll = 0
+        for seq in seqs:
+            all_log_ll += self.ll(seq)
+        
+        return all_log_ll / len(seqs)
+
+            
+
 
 
 
@@ -66,8 +103,11 @@ class MixedHMM():
 if __name__ == "__main__":
     mixed_states = [[0.0, 1.0, 0.5], [10.0, 1.0, 0.5], [20.0, 1.0, 0.5]]
     mhmm = MixedHMM(mixed_states)
-    
-    print(mhmm.sample_traj(10))
+    num_time_steps_mix = 2
+    test_len_mix = 5
+    test_data_mix = np.array([mhmm.sample_obs(num_time_steps_mix) for _ in range(test_len_mix)])
+    avg_ll_mix = mhmm.avg_ll(test_data_mix)
+    print(avg_ll_mix)
 
 
 
