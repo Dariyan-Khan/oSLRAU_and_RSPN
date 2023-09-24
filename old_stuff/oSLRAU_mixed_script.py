@@ -1,4 +1,4 @@
-from mixed_state_hmm import MixedHMM
+from oSLRAU_and_RSPN.mixed_state_hmm import MixedHMM
 
 # Define MHMM
 mixed_states = [[0.0, 1.0, 0.5], [10.0, 1.0, 0.5], [20.0, 1.0, 0.5]]

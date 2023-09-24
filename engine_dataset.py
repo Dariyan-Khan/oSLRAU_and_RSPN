@@ -45,6 +45,12 @@ def get_engine_parameters():
     emission_means = torch.tensor(emission_means, dtype=torch.float64)
     emission_covars = torch.tensor(emission_covars, dtype=torch.float64)
 
+    emission_means = emission_means
+
+    emission_covars = emission_covars
+
+
+
     return (
         prior_proba,
         start_proba,
