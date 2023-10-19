@@ -1,1 +1,8 @@
 .idea
+*.pdf
+*.pyc
+__pycache__
+*.DS_Store
+*.html
+*.pkl
+*.pickle

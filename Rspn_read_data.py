@@ -24,7 +24,9 @@ def read_csv_data(file_path):
     df = df.iloc[:]
 
     # print(df.dtypes)
-    df = df.convert_objects(convert_numeric=True)
+    #df = df.convert_objects(convert_numeric=True)
+    #df = pd.to_numeric(df)
+    df = df.apply(pd.to_numeric)
     # pd.to_numeric(df)
     # print(df)
 
@@ -53,13 +55,13 @@ def read_varying_seq_data(file_path):
             else:
                 time_step = line.split()
                 for col_val in time_step:
-                    seq.append(col_val)  # add each value of each time step of the whole sequence to a seq list
+                    seq.append(col_val)  # add each value of each time step of the whole sequence to a seq list 
+                    #this takes a 5 time step seq with 10 vars each time and writing it as a 50 len single list
 
     for i, seq in enumerate(data_list):
         for j, val in enumerate(seq):
             data_list[i][j] = float(val)
 
     data = [np.reshape(np.array(xi), (1, -1)) for xi in data_list]
-    print(data[0:5])
 
     return data

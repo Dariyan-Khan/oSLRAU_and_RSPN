@@ -36,8 +36,11 @@ def run_oSLRAU(dataset, update_after_no_min_batches, prune_after):
     oSLRAU_params = oSLRAUParams(mergebatch_threshold=128, corrthresh=0.1, mvmaxscope=1, equalweight=True,
                                  currVals=True)
     no_of_minibatches = int(data.shape[0] / mini_batch_size)
+    print(f"==>> no_of_minibatches: {no_of_minibatches}")
+
 
     # update using oSLRAU
+
     for i in range(1, no_of_minibatches):
         mini_batch = data[i * mini_batch_size: (i+1) * mini_batch_size]
 
@@ -58,7 +61,10 @@ def get_data(dataset):
 
     csv_file_path_hh_power = 'path/to/file'
     csv_file_path_other_power = 'path/to/file'
-    csv_file_path_wine_qual = 'path/to/file'
+    csv_file_path_wine_qual = 'oSLRAU_and_RSPN/datasets/winequality-red.csv'
+    csv_file_path_japan_vowels = "./oSLRAU_and_RSPN/datasets/japan_vowels.train"
+    csv_file_path_libras = "datasets/movement_libras.csv"
+    csv_file_path_hill = "datasets/Hill_Valley_without_noise_Training.csv"
 
     if dataset == 'hh_power':
         file_path = csv_file_path_hh_power
@@ -92,7 +98,8 @@ def get_data(dataset):
         df = pd.read_csv(file_path, sep=';')
 
         df = df.iloc[:]
-        df = df.convert_objects(convert_numeric=True)
+        # df = df.convert_objects(convert_numeric=True)
+        df = df.apply(pd.to_numeric)
 
         data = df.values
         data = data[0:-1]
@@ -100,6 +107,54 @@ def get_data(dataset):
 
         print(data)
         return data
+    
+    elif dataset == 'japan_vowels':
+        file_path = csv_file_path_japan_vowels
+        df = pd.read_csv(file_path, sep='')
+
+        df = df.iloc[:]
+        # df = df.apply(pd.to_numeric)
+
+        data = df.values
+        data = data[0:-1]
+        data = data.astype(float)
+        return data
+    
+    elif dataset == 'libras':
+        file_path = csv_file_path_libras
+        df = pd.read_csv(file_path, sep=',')
+
+        df = df.iloc[:]
+        df = df.apply(pd.to_numeric)
+
+        data = df.values
+        #assert False
+        
+
+        data = data[0:-1]
+        data = data.astype(float)
+
+        return data
+    
+    elif dataset == "hill":
+        file_path = csv_file_path_hill
+        df = pd.read_csv(file_path, sep=',')
+
+        df = df.iloc[:]
+        df = df.apply(pd.to_numeric)
+
+        data = df.values
+
+        #assert False
+        
+
+        data = data[0:-1]
+        data = data.astype(float)
+
+        return data
+
+
+
 
 def main():
     dataset = 'wine_qual'
